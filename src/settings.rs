@@ -2,6 +2,7 @@ use std::net::Ipv4Addr;
 use std::time::Duration;
 use std::collections::HashMap;
 use std::sync::Arc;
+use pnet::packet::ip::{IpNextHeaderProtocol, IpNextHeaderProtocols};
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum SettingsPattern {
@@ -18,6 +19,7 @@ pub struct SendPacketSettings {
     pub src_port: u16,
     pub dst_port: u16,
     pub packet_size: usize,
+    pub ip_next_header_protocol: IpNextHeaderProtocol,
     pub timeout: Duration,
     pub payload: Vec<u8>,
     pub packet_count: usize,
@@ -31,6 +33,7 @@ impl SendPacketSettings {
         src_port: u16,
         dst_port: u16,
         packet_size: usize,
+        ip_next_header_protocol: IpNextHeaderProtocol,
         timeout: Duration,
         payload: Vec<u8>,
         packet_count: usize,
@@ -42,6 +45,7 @@ impl SendPacketSettings {
             src_port,
             dst_port,
             packet_size,
+            ip_next_header_protocol,
             timeout,
             payload,
             packet_count,
@@ -66,6 +70,7 @@ impl SettingsLocator {
                 50000,
                 50000,
                 1000,
+                IpNextHeaderProtocols::Tcp,
                 Duration::from_secs(10),
                 vec![0; 1000],
                 1000,
@@ -81,6 +86,7 @@ impl SettingsLocator {
                 50000,
                 50000,
                 500,
+                IpNextHeaderProtocols::Tcp,
                 Duration::from_secs(5),
                 vec![0; 500],
                 5000,
@@ -96,6 +102,7 @@ impl SettingsLocator {
                 50000,
                 50000,
                 8000,
+                IpNextHeaderProtocols::Tcp,
                 Duration::from_secs(30),
                 vec![0; 8000],
                 100,
@@ -111,10 +118,11 @@ impl SettingsLocator {
                 50000,
                 50000,
                 8000,
+                IpNextHeaderProtocols::Tcp,
                 Duration::from_millis(30),
                 vec![0; 1000],
-                100000000000000,
-                Duration::from_nanos(30),
+                10000000,
+                Duration::from_nanos(0),
             )),
         );
 

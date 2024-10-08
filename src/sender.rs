@@ -22,7 +22,10 @@ fn send_packets(cap: &mut Capture<Active>, settings: Arc<SendPacketSettings>) ->
 
     for i in 0..settings.packet_count {
         cap.sendpacket(ethernet_buffer.clone())?;
-        println!("パケット {} / {} を送信しました", i + 1, settings.packet_count);
+        if (i + 1) % 10000 == 0 {
+            let elapsed_time = start_time.elapsed();
+            println!("パケット {} / {} を送信しました (経過時間: {:.2} 秒)", i + 1, settings.packet_count, elapsed_time.as_secs_f64());
+        }
         std::thread::sleep(settings.interval);
     }
 
